@@ -1,7 +1,6 @@
 {
   "extends": [
-    "tslint-config-airbnb",
-    "tslint-react"
+    "tslint-config-airbnb"
   ],
   "rules": {
     "jsx-boolean-value": [true, "never"],
