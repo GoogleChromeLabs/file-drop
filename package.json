@@ -1,11 +1,12 @@
 {
   "name": "file-drop-element",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "File Drop Custom Element",
   "main": "dist/filedrop.js",
   "umd:main": "dist/filedrop.umd.js",
   "module": "dist/filedrop.mjs",
   "source": "index.ts",
+  "types": "index.d.ts",
   "scripts": {
     "build": "microbundle",
     "clean": "rm dist/*",

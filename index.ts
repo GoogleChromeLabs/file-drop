@@ -10,7 +10,7 @@
  * let f = new C().foo;
  * f() instanceof C;    // true
  */
-export function bind(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+function bind(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
   return {
     // the first time the prototype property is accessed for an instance,
     // define an instance property pointing to the bound function.

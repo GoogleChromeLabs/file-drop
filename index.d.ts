@@ -1,9 +1,11 @@
-import { FileDropEvent, FileDrop } from '.';
+import * as FileDrop from './index';
+
+
+export = FileDrop;
 
 declare global {
-
   interface HTMLElementEventMap {
-    'filedrop': FileDropEvent;
+    'filedrop': FileDrop.FileDropEvent;
   }
 
   namespace JSX {
@@ -13,7 +15,7 @@ declare global {
 
     interface FileDropAttributes extends HTMLAttributes {
       accept?: string;
-      onfiledrop?: ((this: FileDrop, ev: FileDropEvent) => any) | null;
+      onfiledrop?: ((this: FileDrop.FileDrop, ev: FileDrop.FileDropEvent) => any) | null;
     }
   }
 }

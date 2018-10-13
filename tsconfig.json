@@ -11,6 +11,10 @@
     "jsx": "react",
     "jsxFactory": "h",
     "allowJs": false,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "typeRoots": [
+      "index.d.ts",
+      "node_modules/@types"
+    ]
   }
 }
