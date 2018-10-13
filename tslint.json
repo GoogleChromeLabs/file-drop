@@ -1,0 +1,21 @@
+{
+  "extends": [
+    "tslint-config-airbnb"
+  ],
+  "rules": {
+    "jsx-boolean-value": [true, "never"],
+    "jsx-no-multiline-js": false,
+    "jsx-no-bind": true,
+    "jsx-no-lambda": true,
+    "function-name": false,
+    "variable-name": [true, "check-format", "allow-leading-underscore"],
+    "no-duplicate-imports": false,
+    "prefer-template": [true, "allow-single-concat"],
+    "import-name": false
+  },
+  "linterOptions": {
+    "exclude": [
+      "build"
+    ]
+  }
+}
