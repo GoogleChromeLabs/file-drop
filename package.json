@@ -1,6 +1,6 @@
 {
   "name": "file-drop",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "File Drop Custom Element",
   "main": "dist/filedrop.js",
   "umd:main": "dist/filedrop.umd.js",
