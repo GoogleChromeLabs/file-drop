@@ -1,5 +1,5 @@
 {
-  "name": "file-drop",
+  "name": "file-drop-element",
   "version": "0.0.1",
   "description": "File Drop Custom Element",
   "main": "dist/filedrop.js",
