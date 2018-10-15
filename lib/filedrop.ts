@@ -55,19 +55,19 @@ function getFileData(data: DataTransfer, accept: string): File | undefined {
   return dragDataItem.getAsFile() || undefined;
 }
 
-interface FileDropEventInit extends EventInit {
-  action: FileDropAccept;
-  file: File;
-}
-
-type FileDropAccept = 'drop' | 'paste';
-
 // Safari and Edge don't quite support extending Event, this works around it.
 function fixExtendedEvent(instance: Event, type: Function) {
   if (!(instance instanceof type)) {
     Object.setPrototypeOf(instance, type.prototype);
   }
 }
+
+interface FileDropEventInit extends EventInit {
+  action: FileDropAccept;
+  file: File;
+}
+
+type FileDropAccept = 'drop' | 'paste';
 
 export class FileDropEvent extends Event {
   private _action: FileDropAccept;
@@ -94,12 +94,12 @@ export class FileDropEvent extends Event {
     accept='image/*'
     class='drop-valid|drop-invalid'
   >
-   [everything in here is a drop target.]
+  [everything in here is a drop target.]
   </file-drop>
 
   dropElement.addEventListner('dropfile', (event) => console.log(event.detail))
 */
-export class FileDrop extends HTMLElement {
+export class FileDropElement extends HTMLElement {
 
   private _dragEnterCount = 0;
 
@@ -129,7 +129,8 @@ export class FileDrop extends HTMLElement {
     // We don't have data, attempt to get it and if it matches, set the correct state.
     const validDrop: boolean = event.dataTransfer.items.length ?
       !!firstMatchingItem(event.dataTransfer.items, this.accept) :
-      // Safari doesn't give file information on drag enter, so the best we can do is return valid.
+      // Safari doesn't give file information on drag enter, so the best we
+      // can do is return valid.
       true;
 
     if (validDrop) {
@@ -174,4 +175,20 @@ export class FileDrop extends HTMLElement {
   }
 }
 
-customElements.define('file-drop', FileDrop);
+// Keeping JSX happy
+declare global {
+  interface HTMLElementEventMap {
+    'filedrop': FileDropEvent;
+  }
+
+  namespace JSX {
+    interface IntrinsicElements {
+      'file-drop': FileDropAttributes;
+    }
+
+    interface FileDropAttributes extends HTMLAttributes {
+      accept?: string;
+      onfiledrop?: ((this: FileDropElement, ev: FileDropEvent) => any) | null;
+    }
+  }
+}
