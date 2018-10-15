@@ -5,8 +5,8 @@
   "main": "dist/filedrop.js",
   "umd:main": "dist/filedrop.umd.js",
   "module": "dist/filedrop.mjs",
-  "source": "index.ts",
-  "types": "index.d.ts",
+  "source": "filedrop.ts",
+  "types": "filedrop.d.ts",
   "scripts": {
     "build": "microbundle",
     "clean": "rm dist/*",

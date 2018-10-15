@@ -13,7 +13,7 @@
     "allowJs": false,
     "baseUrl": ".",
     "typeRoots": [
-      "index.d.ts",
+      "filedrop.d.ts",
       "node_modules/@types"
     ]
   }
