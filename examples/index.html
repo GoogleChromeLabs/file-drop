@@ -4,7 +4,10 @@
     <script>
       onload = (event) => {
         let dropElement = document.getElementById('drop');
-        dropElement.addEventListener('dropfile', (event) => console.log(event.detail));
+        dropElement.addEventListener('filedrop', (event) => console.log('drop', event.file));
+
+        let dropAnyElement = document.getElementById('dropAny');
+        dropAnyElement.addEventListener('filedrop', (event) => console.log('dropAny', event.file));
       };
     </script>
     <script src='../dist/filedrop.umd.js'></script>
@@ -27,7 +30,11 @@
   </head>
   <body>
     <file-drop id='drop' accept='video/*'>
-      Drop file here
+      Drop video/* here
+    </file-drop>
+
+    <file-drop id='dropAny'>
+      Drop any file here
     </file-drop>
   </body>
 </html>

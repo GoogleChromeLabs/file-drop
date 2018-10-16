@@ -27,6 +27,11 @@ function bind(target: any, propertyKey: string, descriptor: PropertyDescriptor) 
 
 // tslint:disable-next-line:max-line-length
 function firstMatchingItem(list: DataTransferItemList, acceptVal: string): DataTransferItem | undefined {
+  // Return the first item (or undefined) if our filter is for all files
+  if (acceptVal === '') {
+    return Array.from(list).find(item => item.kind === 'file');
+  }
+
   // Split accepts values by ',' then by '/'. Trim everything & lowercase.
   const accepts = acceptVal.toLowerCase().split(',').map((accept) => {
     return accept.split('/').map(part => part.trim());
@@ -97,7 +102,7 @@ export class FileDropEvent extends Event {
   [everything in here is a drop target.]
   </file-drop>
 
-  dropElement.addEventListner('dropfile', (event) => console.log(event.detail))
+  dropElement.addEventListner('filedrop', (event) => console.log(event.detail))
 */
 export class FileDropElement extends HTMLElement {
 
