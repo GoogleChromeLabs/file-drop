@@ -1,0 +1,21 @@
+{
+  "compileOnSave": false,
+  "files": [
+    "lib/filedrop.ts",
+    "./node_modules/preact/dist/preact"
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "declaration": true,
+    "target": "es2017",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "noUnusedLocals": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "allowJs": false,
+    "baseUrl": "."
+  }
+}

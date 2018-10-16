@@ -1,0 +1,8 @@
+node_modules
+dist
+/build
+/*.log
+*.scss.d.ts
+*.css.d.ts
+*.o
+.rpt2_cache

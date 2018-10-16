@@ -1,0 +1,38 @@
+{
+  "name": "file-drop-element",
+  "version": "0.0.7",
+  "description": "File Drop Custom Element",
+  "main": "dist/filedrop.js",
+  "umd:main": "dist/filedrop.umd.js",
+  "module": "dist/filedrop.mjs",
+  "source": "lib/filedrop.ts",
+  "types": "dist/filedrop.d.ts",
+  "scripts": {
+    "build": "microbundle",
+    "clean": "rm dist/*",
+    "dev": "microbundle watch",
+    "lint": "tslint -c tslint.json -t verbose 'src/**/*.{ts,tsx,js,jsx}'"
+  },
+  "devDependencies": {
+    "@types/node": "^9.6.35",
+    "microbundle": "^0.6.0",
+    "preact": "^8.3.1",
+    "tslint": "^5.11.0",
+    "tslint-config-airbnb": "^5.11.0",
+    "typescript": "^2.9.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GoogleChromeLabs/file-drop.git"
+  },
+  "keywords": [
+    "custom",
+    "element"
+  ],
+  "author": "Paul Kinlan",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/GoogleChromeLabs/file-drop/issues"
+  },
+  "homepage": "https://github.com/GoogleChromeLabs/file-drop#readme"
+}

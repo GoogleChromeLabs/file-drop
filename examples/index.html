@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <title>Drag and Drop element example</title>
+    <script>
+      onload = (event) => {
+        let dropElement = document.getElementById('drop');
+        dropElement.addEventListener('dropfile', (event) => console.log(event.detail));
+      };
+    </script>
+    <script src='../dist/filedrop.umd.js'></script>
+    <style>
+    file-drop {
+      display: block;
+      margin: 2em;
+      padding: 4em;
+      border: 3px dotted black;
+    }
+
+    file-drop.drop-valid {
+      background-color: green;
+    }
+
+    file-drop.drop-invalid {
+      background-color: red;
+    }
+    </style>
+  </head>
+  <body>
+    <file-drop id='drop' accept='video/*'>
+      Drop file here
+    </file-drop>
+  </body>
+</html>
