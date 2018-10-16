@@ -29,7 +29,7 @@ function bind(target: any, propertyKey: string, descriptor: PropertyDescriptor) 
 function firstMatchingItem(list: DataTransferItemList, acceptVal: string): DataTransferItem | undefined {
   // Split accepts values by ',' then by '/'. Trim everything & lowercase.
   const accepts = acceptVal.toLowerCase().split(',').map((accept) => {
-    return accept.trim().split('/').map(part => part.trim());
+    return accept.split('/').map(part => part.trim());
   }).filter(acceptParts => acceptParts.length === 2); // Filter invalid values
 
   return Array.from(list).find((item) => {
