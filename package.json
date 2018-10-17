@@ -1,6 +1,6 @@
 {
   "name": "file-drop-element",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "File Drop Custom Element",
   "main": "dist/filedrop.js",
   "umd:main": "dist/filedrop.umd.js",
@@ -9,6 +9,7 @@
   "types": "dist/filedrop.d.ts",
   "scripts": {
     "build": "microbundle",
+    "serve": "serve -l tcp:0.0.0.0:8080 .",
     "clean": "rm dist/*",
     "dev": "microbundle watch",
     "lint": "tslint -c tslint.json -t verbose 'src/**/*.{ts,tsx,js,jsx}'"
@@ -17,6 +18,7 @@
     "@types/node": "^9.6.35",
     "microbundle": "^0.6.0",
     "preact": "^8.3.1",
+    "serve": "^10.0.2",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",
     "typescript": "^2.9.2"
