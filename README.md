@@ -7,6 +7,10 @@ dropped on it and fires a dedicated event `onfiledrop` when a successful drop oc
 
 `npm i file-drop-element`
 
+## Demo
+
+You can try a quick demo of this element on [glitch](https://file-drop-element.glitch.me/).
+
 ## Usage
 
 ### Directly as a module
