@@ -39,6 +39,26 @@ Copy from `node_modules` in to a local directory.
 </file-drop>
 ```
 
+### Respond to when a file is dropped on the element
+
+When a user has succesfully dropped a file on to the element, the 
+element will emit a `filedrop` event. The `filedrop` event
+contains a `file` property which is a direct reference to the `File`
+that was dropped.
+
+```
+<file-drop id="dropTarget">Drop a file here</file-drop>
+
+<script>
+dropTarget.addEventListener('filedrop', (e) => {
+  dropTarget.textContent = e.file.name;
+});
+</script>
+```
+
+Note: if more than one file is dropped on the element, only the first file
+will be included on the event.
+
 ### Only allow certain files to be dropped on the element.
 
 The element will accept any `drop` event that has the `.dataTransfer` object
