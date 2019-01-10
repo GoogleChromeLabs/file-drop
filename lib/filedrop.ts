@@ -1,30 +1,3 @@
-/**
- * A decorator that binds values to their class instance.
- * @example
- * class C {
- *   @bind
- *   foo () {
- *     return this;
- *   }
- * }
- * let f = new C().foo;
- * f() instanceof C;    // true
- */
-function bind(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-  return {
-    // the first time the prototype property is accessed for an instance,
-    // define an instance property pointing to the bound function.
-    // This effectively "caches" the bound prototype method as an instance property.
-    get() {
-      const bound = descriptor.value.bind(this);
-      Object.defineProperty(this, propertyKey, {
-        value: bound,
-      });
-      return bound;
-    },
-  };
-}
-
 // tslint:disable-next-line:max-line-length
 function firstMatchingItem(list: DataTransferItemList, acceptVal: string): DataTransferItem | undefined {
   // Return the first item (or undefined) if our filter is for all files
@@ -110,6 +83,13 @@ export class FileDropElement extends HTMLElement {
 
   constructor() {
     super();
+
+    // Bind
+    this._onDragEnter = this._onDragEnter.bind(this);
+    this._onDragLeave = this._onDragLeave.bind(this);
+    this._onDrop = this._onDrop.bind(this);
+    this._onPaste = this._onPaste.bind(this);
+
     this.addEventListener('dragover', event => event.preventDefault());
     this.addEventListener('drop', this._onDrop);
     this.addEventListener('dragenter', this._onDragEnter);
@@ -126,7 +106,6 @@ export class FileDropElement extends HTMLElement {
     this.setAttribute('accept', val);
   }
 
-  @bind
   private _onDragEnter(event: DragEvent) {
     this._dragEnterCount += 1;
     if (this._dragEnterCount > 1) return;
@@ -145,7 +124,6 @@ export class FileDropElement extends HTMLElement {
     }
   }
 
-  @bind
   private _onDragLeave() {
     this._dragEnterCount -= 1;
     if (this._dragEnterCount === 0) {
@@ -153,7 +131,6 @@ export class FileDropElement extends HTMLElement {
     }
   }
 
-  @bind
   private _onDrop(event: DragEvent) {
     event.preventDefault();
     this._reset();
@@ -164,7 +141,6 @@ export class FileDropElement extends HTMLElement {
     this.dispatchEvent(new FileDropEvent('filedrop', { action, file }));
   }
 
-  @bind
   private _onPaste(event: ClipboardEvent) {
     const action = 'paste';
     const file = getFileData(event.clipboardData, this.accept);
