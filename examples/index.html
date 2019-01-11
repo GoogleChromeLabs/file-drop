@@ -4,10 +4,22 @@
     <script>
       onload = (event) => {
         let dropElement = document.getElementById('drop');
-        dropElement.addEventListener('filedrop', (event) => console.log('drop', event.file));
+        dropElement.addEventListener('filedrop', (event) => console.log('drop', event.files));
 
         let dropAnyElement = document.getElementById('dropAny');
-        dropAnyElement.addEventListener('filedrop', (event) => console.log('dropAny', event.file));
+        dropAnyElement.addEventListener('filedrop', (event) => console.log('dropAny', event.files));
+
+        let dropManyElement = document.getElementById('dropMany');
+        dropAnyElement.addEventListener('filedrop', (event) => {
+           console.log('dropMany', event.files);
+           dropManyElement.innerText = event.files.reduce((acc, curr) => acc + '\n' + curr.name);
+        });
+
+        let dropManyImagesElement = document.getElementById('dropManyImages');
+        dropManyImagesElement.addEventListener('filedrop', (event) => {
+           console.log('dropManyImgeas', event.files);
+           dropManyImagesElement.innerText = event.files.reduce((acc, curr) => acc + '\n' + curr.name);
+        });
       };
     </script>
     <script src='../dist/filedrop.umd.js'></script>
@@ -35,6 +47,14 @@
 
     <file-drop id='dropAny'>
       Drop any file here
+    </file-drop>
+
+    <file-drop id='dropMany' multiple>
+      Drop many files here
+    </file-drop>
+
+    <file-drop id='dropManyImages' multiple accept='image/*'>
+      Drop many images here
     </file-drop>
   </body>
 </html>

@@ -1,8 +1,10 @@
 // tslint:disable-next-line:max-line-length
-function firstMatchingItem(list: DataTransferItemList, acceptVal: string): DataTransferItem | undefined {
+function getMatchingItems(list: DataTransferItemList, acceptVal: string, multiple: boolean): DataTransferItem[] {
+  const dataItems = Array.from(list);
+
   // Return the first item (or undefined) if our filter is for all files
   if (acceptVal === '') {
-    return Array.from(list).find(item => item.kind === 'file');
+    return Array.from(list).filter(item => item.kind === 'file');
   }
 
   // Split accepts values by ',' then by '/'. Trim everything & lowercase.
@@ -10,7 +12,7 @@ function firstMatchingItem(list: DataTransferItemList, acceptVal: string): DataT
     return accept.split('/').map(part => part.trim());
   }).filter(acceptParts => acceptParts.length === 2); // Filter invalid values
 
-  return Array.from(list).find((item) => {
+  const predicate = (item:DataTransferItem) => {
     if (item.kind !== 'file') return false;
 
     // 'Parse' the type.
@@ -23,14 +25,33 @@ function firstMatchingItem(list: DataTransferItemList, acceptVal: string): DataT
       }
     }
     return false;
-  });
+  };
+
+  let results: DataTransferItem[];
+
+  if (multiple) {
+    results = dataItems.filter(predicate);
+  } else {
+    const item = dataItems.find(predicate);
+    if (item == null) return [];
+    results = [item];
+  }
+
+  return results;
 }
 
-function getFileData(data: DataTransfer, accept: string): File | undefined {
-  const dragDataItem = firstMatchingItem(data.items, accept);
-  if (!dragDataItem) return;
+function getFileData(data: DataTransfer, accept: string, multiple: boolean): File[] {
+  const dragDataItems = getMatchingItems(data.items, accept, multiple);
+  const files: File[] = [];
 
-  return dragDataItem.getAsFile() || undefined;
+  // This is because Map doesn't like the null type returned by getAsFile
+  dragDataItems.forEach((item) => {
+    const file = item.getAsFile();
+    if (file === null) return;
+    files.push(file);
+  });
+
+  return files;
 }
 
 // Safari and Edge don't quite support extending Event, this works around it.
@@ -42,18 +63,18 @@ function fixExtendedEvent(instance: Event, type: Function) {
 
 interface FileDropEventInit extends EventInit {
   action: FileDropAccept;
-  file: File;
+  files: File[];
 }
 
 type FileDropAccept = 'drop' | 'paste';
 
 export class FileDropEvent extends Event {
   private _action: FileDropAccept;
-  private _file: File;
+  private _files: File[];
   constructor(typeArg: string, eventInitDict: FileDropEventInit) {
     super(typeArg, eventInitDict);
     fixExtendedEvent(this, FileDropEvent);
-    this._file = eventInitDict.file;
+    this._files = eventInitDict.files;
     this._action = eventInitDict.action;
   }
 
@@ -61,8 +82,8 @@ export class FileDropEvent extends Event {
     return this._action;
   }
 
-  get file() {
-    return this._file;
+  get files() {
+    return this._files;
   }
 }
 
@@ -70,6 +91,7 @@ export class FileDropEvent extends Event {
   Example Usage.
   <file-drop
     accept='image/*'
+    multiple | undefined
     class='drop-valid|drop-invalid'
   >
   [everything in here is a drop target.]
@@ -106,13 +128,27 @@ export class FileDropElement extends HTMLElement {
     this.setAttribute('accept', val);
   }
 
+  get multiple() : string | null {
+    return this.getAttribute('multiple');
+  }
+
+  set multiple(val: string | null) {
+    this.setAttribute('multiple', val || '');
+  }
+
   private _onDragEnter(event: DragEvent) {
     this._dragEnterCount += 1;
     if (this._dragEnterCount > 1) return;
+    if (event.dataTransfer === null) {
+      this.classList.add('drop-invalid');
+      return;
+    }
 
     // We don't have data, attempt to get it and if it matches, set the correct state.
-    const validDrop: boolean = event.dataTransfer.items.length ?
-      !!firstMatchingItem(event.dataTransfer.items, this.accept) :
+    const items = event.dataTransfer.items;
+    const matchingFiles = getMatchingItems(items, this.accept, (this.multiple !== undefined));
+    const validDrop: boolean = event.dataTransfer && event.dataTransfer.items.length ?
+      (matchingFiles.length > 0) :
       // Safari doesn't give file information on drag enter, so the best we
       // can do is return valid.
       true;
@@ -133,20 +169,21 @@ export class FileDropElement extends HTMLElement {
 
   private _onDrop(event: DragEvent) {
     event.preventDefault();
+    if (event.dataTransfer === null) return;
     this._reset();
     const action = 'drop';
-    const file = getFileData(event.dataTransfer, this.accept);
-    if (file === undefined) return;
+    const files = getFileData(event.dataTransfer, this.accept, (this.multiple !== undefined));
+    if (files === undefined) return;
 
-    this.dispatchEvent(new FileDropEvent('filedrop', { action, file }));
+    this.dispatchEvent(new FileDropEvent('filedrop', { action, files }));
   }
 
   private _onPaste(event: ClipboardEvent) {
     const action = 'paste';
-    const file = getFileData(event.clipboardData, this.accept);
-    if (file === undefined) return;
+    const files = getFileData(event.clipboardData, this.accept, (this.multiple !== undefined));
+    if (files === undefined) return;
 
-    this.dispatchEvent(new FileDropEvent('filedrop', { action, file }));
+    this.dispatchEvent(new FileDropEvent('filedrop', { action, files }));
   }
 
   private _reset() {
