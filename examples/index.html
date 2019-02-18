@@ -10,15 +10,15 @@
         dropAnyElement.addEventListener('filedrop', (event) => console.log('dropAny', event.files));
 
         let dropManyElement = document.getElementById('dropMany');
-        dropAnyElement.addEventListener('filedrop', (event) => {
+        dropManyElement.addEventListener('filedrop', (event) => {
            console.log('dropMany', event.files);
-           dropManyElement.innerText = event.files.reduce((acc, curr) => acc + '\n' + curr.name);
+           dropManyElement.innerText = event.files.map(f => f.name).join('\n');
         });
 
         let dropManyImagesElement = document.getElementById('dropManyImages');
         dropManyImagesElement.addEventListener('filedrop', (event) => {
-           console.log('dropManyImgeas', event.files);
-           dropManyImagesElement.innerText = event.files.reduce((acc, curr) => acc + '\n' + curr.name);
+           console.log('dropManyImages', event.files);
+           dropManyImagesElement.innerText = event.files.map(f => f.name).join('\n');
         });
       };
     </script>

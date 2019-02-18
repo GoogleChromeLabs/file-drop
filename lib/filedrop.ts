@@ -1,10 +1,12 @@
 // tslint:disable-next-line:max-line-length
 function getMatchingItems(list: DataTransferItemList, acceptVal: string, multiple: boolean): DataTransferItem[] {
   const dataItems = Array.from(list);
+  let results: DataTransferItem[];
 
   // Return the first item (or undefined) if our filter is for all files
   if (acceptVal === '') {
-    return Array.from(list).filter(item => item.kind === 'file');
+    results = dataItems.filter(item => item.kind === 'file');
+    return (multiple) ? results : [results[0]];
   }
 
   // Split accepts values by ',' then by '/'. Trim everything & lowercase.
@@ -27,14 +29,9 @@ function getMatchingItems(list: DataTransferItemList, acceptVal: string, multipl
     return false;
   };
 
-  let results: DataTransferItem[];
-
-  if (multiple) {
-    results = dataItems.filter(predicate);
-  } else {
-    const item = dataItems.find(predicate);
-    if (item == null) return [];
-    results = [item];
+  results = results = dataItems.filter(predicate);
+  if (multiple === false) {
+    results = [results[0]];
   }
 
   return results;
@@ -97,7 +94,7 @@ export class FileDropEvent extends Event {
   [everything in here is a drop target.]
   </file-drop>
 
-  dropElement.addEventListner('filedrop', (event) => console.log(event.detail))
+  dropElement.addEventListener('filedrop', (event) => console.log(event.detail))
 */
 export class FileDropElement extends HTMLElement {
 
@@ -146,9 +143,9 @@ export class FileDropElement extends HTMLElement {
 
     // We don't have data, attempt to get it and if it matches, set the correct state.
     const items = event.dataTransfer.items;
-    const matchingFiles = getMatchingItems(items, this.accept, (this.multiple !== undefined));
+    const matchingFiles = getMatchingItems(items, this.accept, (this.multiple !== null));
     const validDrop: boolean = event.dataTransfer && event.dataTransfer.items.length ?
-      (matchingFiles.length > 0) :
+      (matchingFiles[0] !== undefined) :
       // Safari doesn't give file information on drag enter, so the best we
       // can do is return valid.
       true;
@@ -172,7 +169,7 @@ export class FileDropElement extends HTMLElement {
     if (event.dataTransfer === null) return;
     this._reset();
     const action = 'drop';
-    const files = getFileData(event.dataTransfer, this.accept, (this.multiple !== undefined));
+    const files = getFileData(event.dataTransfer, this.accept, (this.multiple !== null));
     if (files === undefined) return;
 
     this.dispatchEvent(new FileDropEvent('filedrop', { action, files }));
