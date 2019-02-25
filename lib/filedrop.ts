@@ -190,7 +190,6 @@ export class FileDropElement extends HTMLElement {
   }
 }
 
-customElements.define('file-drop', FileDropElement);
 
 // Keeping JSX happy
 declare global {

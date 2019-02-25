@@ -3,15 +3,16 @@
   "version": "0.2.0",
   "description": "File Drop Custom Element",
   "main": "dist/filedrop.js",
-  "umd:main": "dist/filedrop.umd.js",
+  "umd:main": "dist/filedrop-autoregister.umd.js",
   "module": "dist/filedrop.mjs",
   "source": "lib/filedrop.ts",
   "types": "dist/filedrop.d.ts",
   "scripts": {
-    "build": "microbundle",
+    "build:lib": "microbundle --compress -i lib/filedrop.ts -o dist/filedrop.js",
+    "build:autoregister": "microbundle --compress -i lib/filedrop-autoregister.ts -o dist/filedrop-autoregister.js",
+    "build": "npm run build:lib && npm run build:autoregister",
     "serve": "serve -l tcp:0.0.0.0:8080 .",
     "clean": "rm dist/*",
-    "dev": "microbundle watch",
     "lint": "tslint -c tslint.json -t verbose 'src/**/*.{ts,tsx,js,jsx}'"
   },
   "devDependencies": {
