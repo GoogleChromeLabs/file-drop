@@ -1,8 +1,8 @@
 {
   "compileOnSave": false,
   "files": [
+    "lib/filedrop-element.ts",
     "lib/filedrop.ts",
-    "lib/filedrop-autoregister.ts",
     "./node_modules/preact/dist/preact"
   ],
   "compilerOptions": {
