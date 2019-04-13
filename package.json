@@ -8,10 +8,11 @@
   "source": "lib/filedrop.ts",
   "types": "dist/filedrop.d.ts",
   "scripts": {
-    "build": "microbundle",
+    "build:element": "microbundle --compress -i lib/filedrop-element.ts -o dist/filedrop-element.js",
+    "build:bundle": "microbundle --compress -i lib/filedrop.ts -o dist/filedrop.js",
+    "build": "npm run build:bundle && npm run build:element",
     "serve": "serve -l tcp:0.0.0.0:8080 .",
     "clean": "rm dist/*",
-    "dev": "microbundle watch",
     "lint": "tslint -c tslint.json -t verbose 'src/**/*.{ts,tsx,js,jsx}'"
   },
   "devDependencies": {

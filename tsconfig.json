@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "files": [
+    "lib/filedrop-element.ts",
     "lib/filedrop.ts",
     "./node_modules/preact/dist/preact"
   ],
