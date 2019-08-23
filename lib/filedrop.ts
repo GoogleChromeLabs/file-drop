@@ -177,6 +177,7 @@ export class FileDropElement extends HTMLElement {
 
   private _onPaste(event: ClipboardEvent) {
     const action = 'paste';
+    if(!event.clipboardData) return;
     const files = getFileData(event.clipboardData, this.accept, (this.multiple !== undefined));
     if (files === undefined) return;
 
