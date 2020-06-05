@@ -46,7 +46,7 @@ element will emit a `filedrop` event. The `filedrop` event
 contains a `file` property which is a direct reference to the `File`
 that was dropped.
 
-```
+```HTML
 <file-drop id="dropTarget">Drop a file here</file-drop>
 
 <script>
