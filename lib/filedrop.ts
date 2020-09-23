@@ -192,21 +192,3 @@ export class FileDropElement extends HTMLElement {
 }
 
 customElements.define('file-drop', FileDropElement);
-
-// Keeping JSX happy
-declare global {
-  interface HTMLElementEventMap {
-    'filedrop': FileDropEvent;
-  }
-
-  namespace JSX {
-    interface IntrinsicElements {
-      'file-drop': FileDropAttributes;
-    }
-
-    interface FileDropAttributes extends HTMLAttributes {
-      accept?: string;
-      onfiledrop?: ((this: FileDropElement, ev: FileDropEvent) => any) | null;
-    }
-  }
-}
