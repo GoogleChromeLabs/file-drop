@@ -9,10 +9,13 @@ function getMatchingItems(list: DataTransferItemList, acceptVal: string, multipl
     return (multiple) ? results : [results[0]];
   }
 
+  const acceptsVals = acceptVal.toLowerCase().split(',');
   // Split accepts values by ',' then by '/'. Trim everything & lowercase.
-  const accepts = acceptVal.toLowerCase().split(',').map((accept) => {
+  const acceptsMime = acceptsVals.map((accept) => {
     return accept.split('/').map(part => part.trim());
   }).filter(acceptParts => acceptParts.length === 2); // Filter invalid values
+
+  const acceptsExtension = acceptsVals.filter((accept) => accept.startsWith('.'));
 
   const predicate = (item:DataTransferItem) => {
     if (item.kind !== 'file') return false;
@@ -20,17 +23,27 @@ function getMatchingItems(list: DataTransferItemList, acceptVal: string, multipl
     // 'Parse' the type.
     const [typeMain, typeSub] = item.type.toLowerCase().split('/').map(s => s.trim());
 
-    for (const [acceptMain, acceptSub] of accepts) {
+    for (const [acceptMain, acceptSub] of acceptsMime) {
       // Look for an exact match, or a partial match if * is accepted, eg image/*.
       if (typeMain === acceptMain && (acceptSub === '*' || typeSub === acceptSub)) {
         return true;
       }
     }
+
+    const file = item.getAsFile();
+
+    // Skip if we can't check the extension
+    if (file === null) return false;
+
+    for (const extension of acceptsExtension) {
+      if (file.name.endsWith(extension)) return true;
+    }
+
     return false;
   };
 
-  results = results = dataItems.filter(predicate);
-  if (multiple === false) {
+  results = dataItems.filter(predicate);
+  if (!multiple) {
     results = [results[0]];
   }
 
