@@ -192,3 +192,9 @@ export class FileDropElement extends HTMLElement {
 }
 
 customElements.define('file-drop', FileDropElement);
+
+declare global {
+  interface HTMLElementEventMap {
+    'filedrop': FileDropEvent;
+  }
+}
