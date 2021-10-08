@@ -29,7 +29,7 @@ function getMatchingItems(list: DataTransferItemList, acceptVal: string, multipl
     return false;
   };
 
-  results = results = dataItems.filter(predicate);
+  results = dataItems.filter(predicate);
   if (multiple === false) {
     results = [results[0]];
   }
