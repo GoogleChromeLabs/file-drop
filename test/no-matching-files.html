@@ -1,0 +1,38 @@
+<!-- Copyright 2026 Google LLC. Licensed under the Apache License, Version 2.0. -->
+<!doctype html>
+<meta charset="utf-8">
+<title>file-drop empty selection regression</title>
+<style>body{font:16px monospace;padding:24px;white-space:pre-wrap}</style>
+<h1>File-drop filtering regression</h1>
+<pre id="results"></pre>
+<script src="../dist/filedrop.umd.js"></script>
+<script>
+const results = [];
+let currentErrors;
+addEventListener('error', event => { currentErrors.push(event.message); event.preventDefault(); });
+for (const accept of ['', 'image/*']) {
+  for (const multiple of [false, true]) {
+    for (const kind of ['empty', 'text', 'rejected', 'accepted', 'pair']) {
+      currentErrors = [];
+      const element = document.createElement('file-drop');
+      element.accept = accept;
+      if (multiple) element.setAttribute('multiple', '');
+      document.body.append(element);
+      const transfer = new DataTransfer();
+      if (kind === 'text') transfer.items.add('plain text', 'text/plain');
+      if (kind === 'rejected') transfer.items.add(new File(['text'], 'notes.txt', {type:'text/plain'}));
+      if (kind === 'accepted' || kind === 'pair') transfer.items.add(new File(['png'], 'photo.png', {type:'image/png'}));
+      if (kind === 'pair') transfer.items.add(new File(['png2'], 'second.png', {type:'image/png'}));
+      let files;
+      element.addEventListener('filedrop', event => files = event.files);
+      element.dispatchEvent(new DragEvent('drop', {dataTransfer:transfer, cancelable:true}));
+      const expected = kind === 'pair' ? (multiple ? 2 : 1) : kind === 'accepted' || (kind === 'rejected' && accept === '') ? 1 : 0;
+      const pass = currentErrors.length === 0 && files && files.length === expected;
+      results.push({accept,multiple,kind,pass:!!pass,errors:[...currentErrors],count:files && files.length});
+      element.remove();
+    }
+  }
+}
+window.testResults = results;
+document.getElementById('results').textContent = JSON.stringify({pass:results.filter(r=>r.pass).length,fail:results.filter(r=>!r.pass).length,results},null,2);
+  </script>
