@@ -6,7 +6,7 @@ function getMatchingItems(list: DataTransferItemList, acceptVal: string, multipl
   // Return the first item (or undefined) if our filter is for all files
   if (acceptVal === '') {
     results = dataItems.filter(item => item.kind === 'file');
-    return (multiple) ? results : [results[0]];
+    return (multiple) ? results : results.slice(0, 1);
   }
 
   // Split accepts values by ',' then by '/'. Trim everything & lowercase.
@@ -31,7 +31,7 @@ function getMatchingItems(list: DataTransferItemList, acceptVal: string, multipl
 
   results = dataItems.filter(predicate);
   if (multiple === false) {
-    results = [results[0]];
+    results = results.slice(0, 1);
   }
 
   return results;
